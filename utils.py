@@ -6,5 +6,5 @@ def loadImage(file):
 	surface = pygame.image.load(file)
 	return surface.convert_alpha()
 
-def loadImages(*files):
+def loadImages(files):
 	return [loadImage(file) for file in files]

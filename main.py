@@ -1,9 +1,13 @@
-import random, pygame, sys
+import random
+import pygame
+import sys
+import threading
+
 from pygame.locals import *
 from bee import Bee
 from frog import Frog
 
-FPS = 60
+FPS = 30
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 480
 CELLSIZE = 20
@@ -30,6 +34,8 @@ angles = (( 45,   0,  -45),
           ( 90,   0,  -90),
           (135, 180, -135))
 
+threadsStopEvent = threading.Event()
+
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT, drawing_group, bee, frog
 
@@ -37,15 +43,29 @@ def main():
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
-    pygame.display.set_caption('Wormy')
+    pygame.display.set_caption('Ecossistema')
 
-    frog = Frog(DISPLAYSURF.get_rect())
-    bee = Bee(DISPLAYSURF.get_rect())
+    frog = Frog(DISPLAYSURF.get_rect(), threadsStopEvent)
+    frog.start();
+
+    frog2 = Frog(DISPLAYSURF.get_rect(), threadsStopEvent)
+    frog2.start();
+
+    bee = Bee(DISPLAYSURF.get_rect(), threadsStopEvent)
+    bee.start();
+
+    bee2 = Bee(DISPLAYSURF.get_rect(), threadsStopEvent)
+    bee2.start();
+
+    bee3 = Bee(DISPLAYSURF.get_rect(), threadsStopEvent)
+    bee3.start();
 
     drawing_group = pygame.sprite.RenderUpdates()
-    drawing_group.add(bee)
     drawing_group.add(frog)
-
+    drawing_group.add(frog2)
+    drawing_group.add(bee)
+    drawing_group.add(bee2)
+    drawing_group.add(bee3)
 
     #showStartScreen()
     runGame()
@@ -55,21 +75,22 @@ def runGame():
     DISPLAYSURF.fill(WHITE)
     drawGrid()
     pygame.display.update()
+
     while True: # main game loop
         for event in pygame.event.get():
             if event.type == QUIT:
                 terminate()
+                break
 
+        #keystate = pygame.key.get_pressed()
+        #xdir = keystate[K_RIGHT] - keystate[K_LEFT]
+        #ydir = keystate[K_DOWN]  - keystate[K_UP]
 
-        keystate = pygame.key.get_pressed()
-        xdir = keystate[K_RIGHT] - keystate[K_LEFT]
-        ydir = keystate[K_DOWN]  - keystate[K_UP]
+        #bee.setAngle(angles[ydir+1][xdir+1])
+        #bee.rect = bee.rect.move((xdir * 8, ydir * 8)).clamp(DISPLAYSURF.get_rect())
 
-        bee.setAngle(angles[ydir+1][xdir+1])
-        bee.rect = bee.rect.move((xdir * 8, ydir * 8)).clamp(DISPLAYSURF.get_rect())
-
-        if bee.rect.colliderect(frog):
-            raise SystemExit, "You win!"
+        #if bee.rect.colliderect(frog):
+            #raise SystemExit, "You win!"
 
         DISPLAYSURF.fill(WHITE)
         drawGrid()
@@ -93,9 +114,9 @@ def checkForKeyPress():
 
 
 def terminate():
+    threadsStopEvent.set()
     pygame.quit()
     sys.exit()
-
 
 def getRandomLocation():
     return {'x': random.randint(0, CELLWIDTH - 1), 'y': random.randint(0, CELLHEIGHT - 1)}
