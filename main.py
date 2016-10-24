@@ -77,29 +77,20 @@ def runGame():
     pygame.display.update()
 
     while True: # main game loop
+        dt = FPSCLOCK.tick(FPS) / 1000.0
         for event in pygame.event.get():
             if event.type == QUIT:
                 terminate()
                 break
 
-        #keystate = pygame.key.get_pressed()
-        #xdir = keystate[K_RIGHT] - keystate[K_LEFT]
-        #ydir = keystate[K_DOWN]  - keystate[K_UP]
-
-        #bee.setAngle(angles[ydir+1][xdir+1])
-        #bee.rect = bee.rect.move((xdir * 8, ydir * 8)).clamp(DISPLAYSURF.get_rect())
-
-        #if bee.rect.colliderect(frog):
-            #raise SystemExit, "You win!"
-
         DISPLAYSURF.fill(WHITE)
         drawGrid()
 
-        drawing_group.update()
+        drawing_group.update(dt)
         update_list = drawing_group.draw(DISPLAYSURF)
 
         pygame.display.update(update_list)
-        FPSCLOCK.tick(FPS)
+
 
 def checkForKeyPress():
     if len(pygame.event.get(QUIT)) > 0:

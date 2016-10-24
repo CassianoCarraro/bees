@@ -1,6 +1,7 @@
 import pygame
 import constants
 import time
+import math
 
 from point import Point
 from threading import Thread
@@ -13,25 +14,50 @@ class Animal(pygame.sprite.Sprite, Thread):
         Thread.__init__(self)
         pygame.sprite.Sprite.__init__(self)
 
-        self.calories = 0
         self.imagesRotated = self.images = loadImages(images)
         self.image = self.images[0]
+        self.rect = self.image.get_rect()
+        self.exact_position = list(self.rect.center)
         self.p = Point(0, 0)
+
         self.animationStatus = 0
         self.screenRect = screenRect
+        self.vec = None
+        self.target = None
+        self.distance = 0
+        self.speed = 100
+        self.moveFreq = 1
+
         self.threadStopEvent = threadStopEvent
 
-        self.rect = self.image.get_rect()
+        self.calories = 0
 
-    def update(self):
+    def update(self, dt):
         self.animationStatus = (self.animationStatus + 1) % len(self.images)
         self.image = self.images[self.animationStatus]
 
-    def move(self):
-        self.p.x = randint(-100, 100)
-        self.p.y = randint(-100, 100)
+        if self.target:
+            travelled = math.hypot(self.vec[0] * dt, self.vec[1] * dt)
+            self.distance -= travelled
+            if self.distance <= 0:
+                #self.rect.center = self.exact_position = self.target
+                self.target = None
+            else:
+                self.exact_position[0] += self.vec[0] * dt
+                self.exact_position[1] += self.vec[1] * dt
+                self.rect.center = self.exact_position
 
-        self.rect = self.rect.move(self.p.x, self.p.y).clamp(self.screenRect)
+    def move(self):
+        self.target = Point(randint(0, 640), randint(0, 480))
+        print "x: " + str(self.target.x)
+        print "y: " + str(self.target.y)
+        x = self.target.x - self.exact_position[0]
+        y = self.target.y - self.exact_position[1]
+        self.distance = math.hypot(x, y)
+        try:
+            self.vec = self.speed * x / self.distance, self.speed * y / self.distance
+        except ZeroDivisionError:
+            pass
 
     def die(self):
         self.calories = 0
@@ -39,4 +65,4 @@ class Animal(pygame.sprite.Sprite, Thread):
     def run(self):
         while (not self.threadStopEvent.is_set()):
             self.move()
-            time.sleep(0.5)
+            time.sleep(self.moveFreq)
