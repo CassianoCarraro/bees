@@ -49,8 +49,6 @@ class Animal(pygame.sprite.Sprite, Thread):
 
     def move(self):
         self.target = Point(randint(0, 640), randint(0, 480))
-        print "x: " + str(self.target.x)
-        print "y: " + str(self.target.y)
         x = self.target.x - self.exact_position[0]
         y = self.target.y - self.exact_position[1]
         self.distance = math.hypot(x, y)
