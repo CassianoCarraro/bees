@@ -9,6 +9,9 @@ from bee import Bee
 from frog import Frog
 
 class Control(object):
+    INDEX_FROGS = 0
+    INDEX_FLIES = 1
+
     """docstring for Control"""
     def __init__(self):
         pygame.init()
@@ -20,27 +23,19 @@ class Control(object):
         self.drawingGroup = pygame.sprite.RenderUpdates()
         self.run = True
         self.threadsStopEvent = threading.Event()
+        self.animalsList = [[] for i in range(2)];
 
-        frog = Frog(self.screenRect, self.threadsStopEvent)
-        frog.start();
+        self.animalsList[self.INDEX_FROGS].append(Frog(self.screenRect, self.threadsStopEvent, self.animalsList[1]));
+        self.animalsList[self.INDEX_FROGS].append(Frog(self.screenRect, self.threadsStopEvent, self.animalsList[1]));
+        
+        self.animalsList[self.INDEX_FLIES].append(Bee(self.screenRect, self.threadsStopEvent));
+        self.animalsList[self.INDEX_FLIES].append(Bee(self.screenRect, self.threadsStopEvent));
+        self.animalsList[self.INDEX_FLIES].append(Bee(self.screenRect, self.threadsStopEvent));
 
-        frog2 = Frog(self.screenRect, self.threadsStopEvent)
-        frog2.start();
-
-        bee = Bee(self.screenRect, self.threadsStopEvent)
-        bee.start();
-
-        bee2 = Bee(self.screenRect, self.threadsStopEvent)
-        bee2.start();
-
-        bee3 = Bee(self.screenRect, self.threadsStopEvent)
-        bee3.start();
-
-        self.drawingGroup.add(frog)
-        self.drawingGroup.add(frog2)
-        self.drawingGroup.add(bee)
-        self.drawingGroup.add(bee2)
-        self.drawingGroup.add(bee3)
+        for animalList in self.animalsList:
+            for animal in animalList:
+                self.drawingGroup.add(animal)
+                animal.start();
 
         self.drawGrid();
         pygame.display.update()

@@ -14,6 +14,7 @@ class Animal(pygame.sprite.Sprite, Thread):
         Thread.__init__(self)
         pygame.sprite.Sprite.__init__(self)
 
+        self.alive = True
         self.imagesRotated = self.images = loadImages(images)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
@@ -33,6 +34,9 @@ class Animal(pygame.sprite.Sprite, Thread):
         self.calories = 0
 
     def update(self, dt):
+        if (not self.alive):
+            return
+
         self.animationStatus = (self.animationStatus + 1) % len(self.images)
         self.image = self.images[self.animationStatus]
 
@@ -58,9 +62,9 @@ class Animal(pygame.sprite.Sprite, Thread):
             pass
 
     def die(self):
-        self.calories = 0
+        self.alive = False
 
     def run(self):
-        while (not self.threadStopEvent.is_set()):
+        while (not self.threadStopEvent.is_set() and self.alive):
             self.move()
             time.sleep(self.moveFreq)
