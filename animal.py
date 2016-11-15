@@ -10,7 +10,7 @@ from utils import loadImages
 
 class Animal(pygame.sprite.Sprite, Thread):
 
-    def __init__(self, screenRect, threadStopEvent, *images):
+    def __init__(self, screen, threadStopEvent, *images):
         Thread.__init__(self)
         pygame.sprite.Sprite.__init__(self)
 
@@ -24,7 +24,7 @@ class Animal(pygame.sprite.Sprite, Thread):
         self.exact_position = list(self.rect.center)
 
         self.animationStatus = 0
-        self.screenRect = screenRect
+        self.screen = screen
         self.vec = None
         self.target = None
         self.distance = 0
@@ -51,6 +51,7 @@ class Animal(pygame.sprite.Sprite, Thread):
                 self.exact_position[0] += self.vec[0] * dt
                 self.exact_position[1] += self.vec[1] * dt
                 self.rect.center = self.exact_position
+        self.updateLabel()
 
     def move(self):
         self.target = self.genPoint()
@@ -67,6 +68,11 @@ class Animal(pygame.sprite.Sprite, Thread):
 
     def genPoint(self):
         return Point(randint(0, constants.GAMERECTWIDTH), randint(0, constants.WINDOWHEIGHT))
+
+    def updateLabel(self):
+        label = pygame.font.SysFont("monospace", 13).render(str(self.calories), 1, (0,0,0))
+        self.screen.blit(label, (self.rect.left, self.rect.top - 20))
+        pygame.display.update(pygame.display.update())
 
     def run(self):
         while (not self.threadStopEvent.is_set() and self.alive):

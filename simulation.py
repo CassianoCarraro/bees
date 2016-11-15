@@ -20,13 +20,13 @@ class Simulation:
 
         frogs = int(actionMenu.txtFrogs.value)
         for i in range(0, frogs):
-            frog = Frog(self.control.screenRect, self.control.threadsStopEvent, self.animalsList[self.INDEX_FLIES])
+            frog = Frog(self.control.screen, self.control.threadsStopEvent, self.animalsList[self.INDEX_FLIES])
             self.animalsList[self.INDEX_FROGS].append(frog)
             self.startAnimal(frog)
 
         flies = int(actionMenu.txtFlies.value)
         for i in range(0, flies):
-            fly = Bee(self.control.screenRect, self.control.threadsStopEvent)
+            fly = Bee(self.control.screen, self.control.threadsStopEvent)
             self.animalsList[self.INDEX_FLIES].append(fly)
             self.startAnimal(fly)
 
@@ -46,6 +46,10 @@ class Simulation:
             seconds = self.secTime % 60
             self.control.actionMenu.txtClock.value = "{0:02}:{1:02}".format(minutes, seconds)
             self.control.actionMenu.txtClock.repaint()
+
+            for i, animal in enumerate(self.animalsList[self.INDEX_FLIES]):
+                if (not animal.alive):
+                    self.control.drawingGroup.remove(animal)
 
             self.frameCount += 1
 

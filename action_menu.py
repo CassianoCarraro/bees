@@ -14,12 +14,12 @@ class ActionMenu:
         container = gui.Table()
 
         container.tr()
-        container.td(gui.Label("Nº Moscas:"))
+        container.td(gui.Label("N Moscas:"))
         self.txtFlies = gui.Input(size=5)
         container.td(self.txtFlies)
 
         container.tr()
-        container.td(gui.Label("Nº Sapos:"))
+        container.td(gui.Label("N Sapos:"))
         self.txtFrogs = gui.Input(size=5)
         container.td(self.txtFrogs)
 
