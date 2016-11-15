@@ -53,6 +53,7 @@ class Control(object):
     def mainLoop(self):
         while self.run:
             dt = self.clock.tick(self.fps) / 1000.0
+            self.simulation.loop()
             self.app.loop()
             self.update(dt)
             self.draw()

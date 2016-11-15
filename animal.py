@@ -66,7 +66,7 @@ class Animal(pygame.sprite.Sprite, Thread):
         self.alive = False
 
     def genPoint(self):
-        return Point(randint(0, constants.GAMERECTWIDTH), randint(0, 480))
+        return Point(randint(0, constants.GAMERECTWIDTH), randint(0, constants.WINDOWHEIGHT))
 
     def run(self):
         while (not self.threadStopEvent.is_set() and self.alive):

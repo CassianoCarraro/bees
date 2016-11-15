@@ -1,5 +1,6 @@
 import sys
 import pygame
+import constants
 
 from pygame.locals import *
 from pgu import gui
@@ -26,6 +27,11 @@ class ActionMenu:
         btnStart = gui.Button("Iniciar")
         btnStart.connect(gui.CLICK, self.start)
         container.td(btnStart);
+
+        container.tr()
+        self.txtClock = gui.Label("00:00", background=constants.LIGHTGRAY)
+        container.td(gui.Label("Tempo: "))
+        container.td(self.txtClock)
 
         return container
 

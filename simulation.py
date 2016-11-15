@@ -1,4 +1,5 @@
 import sys
+import constants
 
 from bee import Bee
 from frog import Frog
@@ -10,6 +11,9 @@ class Simulation:
     def __init__(self, control):
         self.control = control
         self.animalsList = [[] for i in range(2)];
+        self.secTime = 0
+        self.frameCount = 0
+        self.run = False
 
     def start(self):
         actionMenu = self.control.actionMenu
@@ -26,6 +30,22 @@ class Simulation:
             self.animalsList[self.INDEX_FLIES].append(fly)
             self.startAnimal(fly)
 
+        self.secTime = 0
+        self.frameCount = 0
+        self.run = True
+
     def startAnimal(self, animal):
         self.control.drawingGroup.add(animal)
         animal.start();
+
+    def loop(self):
+        if self.run:
+            self.secTime = self.frameCount // constants.FPS
+
+            minutes = self.secTime // 60
+            seconds = self.secTime % 60
+            self.control.actionMenu.txtClock.value = "{0:02}:{1:02}".format(minutes, seconds)
+            self.control.actionMenu.txtClock.repaint()
+
+            self.frameCount += 1
+
