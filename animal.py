@@ -18,8 +18,10 @@ class Animal(pygame.sprite.Sprite, Thread):
         self.imagesRotated = self.images = loadImages(images)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
+
+        initPoint = self.genPoint()
+        self.rect.center = [initPoint.x, initPoint.y]
         self.exact_position = list(self.rect.center)
-        self.p = Point(0, 0)
 
         self.animationStatus = 0
         self.screenRect = screenRect
@@ -30,7 +32,6 @@ class Animal(pygame.sprite.Sprite, Thread):
         self.moveFreq = 1
 
         self.threadStopEvent = threadStopEvent
-
         self.calories = 0
 
     def update(self, dt):
@@ -52,7 +53,7 @@ class Animal(pygame.sprite.Sprite, Thread):
                 self.rect.center = self.exact_position
 
     def move(self):
-        self.target = Point(randint(0, 640), randint(0, 480))
+        self.target = self.genPoint()
         x = self.target.x - self.exact_position[0]
         y = self.target.y - self.exact_position[1]
         self.distance = math.hypot(x, y)
@@ -63,6 +64,9 @@ class Animal(pygame.sprite.Sprite, Thread):
 
     def die(self):
         self.alive = False
+
+    def genPoint(self):
+        return Point(randint(0, constants.GAMERECTWIDTH), randint(0, 480))
 
     def run(self):
         while (not self.threadStopEvent.is_set() and self.alive):

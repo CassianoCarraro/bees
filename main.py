@@ -4,53 +4,42 @@ import sys
 import threading
 from pygame.locals import *
 
+from action_menu import ActionMenu
 from constants import *
-from bee import Bee
-from frog import Frog
+from pgu import gui
+from simulation import Simulation
 
 class Control(object):
-    INDEX_FROGS = 0
-    INDEX_FLIES = 1
-
     """docstring for Control"""
     def __init__(self):
         pygame.init()
         pygame.display.set_caption('Ecossistema')
+
+        self.app = gui.App();
+        self.app.connect(gui.QUIT, self.terminate, None)
+
         self.screen = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-        self.screenRect = self.screen.get_rect()
+        self.screenRect = pygame.draw.rect(self.screen, WHITE, Rect((0, 0), (GAMERECTWIDTH, WINDOWHEIGHT)))
+        self.menuRect = pygame.draw.rect(self.screen, LIGHTGRAY, Rect((GAMERECTWIDTH, 0), (MENUWIDTH, WINDOWHEIGHT)))
+
         self.fps = FPS
         self.clock = pygame.time.Clock()
+        self.actionMenu = ActionMenu(self)
         self.drawingGroup = pygame.sprite.RenderUpdates()
         self.run = True
         self.threadsStopEvent = threading.Event()
-        self.animalsList = [[] for i in range(2)];
+        self.simulation = Simulation(self)
+        self.app.init(self.actionMenu.init(), self.screen, self.menuRect)
 
-        self.animalsList[self.INDEX_FROGS].append(Frog(self.screenRect, self.threadsStopEvent, self.animalsList[1]));
-        self.animalsList[self.INDEX_FROGS].append(Frog(self.screenRect, self.threadsStopEvent, self.animalsList[1]));
-        
-        self.animalsList[self.INDEX_FLIES].append(Bee(self.screenRect, self.threadsStopEvent));
-        self.animalsList[self.INDEX_FLIES].append(Bee(self.screenRect, self.threadsStopEvent));
-        self.animalsList[self.INDEX_FLIES].append(Bee(self.screenRect, self.threadsStopEvent));
-
-        for animalList in self.animalsList:
-            for animal in animalList:
-                self.drawingGroup.add(animal)
-                animal.start();
-
-        self.drawGrid();
+        "self.drawGrid();"
         pygame.display.update()
-
-    def eventLoop(self):
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                self.terminate()
-                break
 
     def update(self, dt):
         self.drawingGroup.update(dt)
 
     def draw(self):
-        self.drawGrid()
+        "self.drawGrid()"
+        self.screen.fill(WHITE)
         updateList = self.drawingGroup.draw(self.screen)
         pygame.display.update(updateList)
 
@@ -64,13 +53,14 @@ class Control(object):
     def mainLoop(self):
         while self.run:
             dt = self.clock.tick(self.fps) / 1000.0
-            self.eventLoop()
+            self.app.loop()
             self.update(dt)
             self.draw()
 
-    def terminate(self):
+    def terminate(self, ev):
         self.threadsStopEvent.set()
         self.run = False
+        self.app.quit()
 
 def main():
     app = Control()
