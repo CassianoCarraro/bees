@@ -3,16 +3,17 @@ import constants
 import time
 import math
 
+from sprite import Sprite
 from point import Point
 from threading import Thread
 from random import randint
-from utils import loadImages
+from utils import *
 
-class Animal(pygame.sprite.Sprite, Thread):
+class Animal(Sprite, Thread):
 
     def __init__(self, screen, threadStopEvent, *images):
         Thread.__init__(self)
-        pygame.sprite.Sprite.__init__(self)
+        Sprite.__init__(self)
 
         self.alive = True
         self.imagesRotated = self.images = loadImages(images)
@@ -45,7 +46,6 @@ class Animal(pygame.sprite.Sprite, Thread):
             travelled = math.hypot(self.vec[0] * dt, self.vec[1] * dt)
             self.distance -= travelled
             if self.distance <= 0:
-                #self.rect.center = self.exact_position = self.target
                 self.target = None
             else:
                 self.exact_position[0] += self.vec[0] * dt
@@ -66,11 +66,8 @@ class Animal(pygame.sprite.Sprite, Thread):
     def die(self):
         self.alive = False
 
-    def genPoint(self):
-        return Point(randint(0, constants.GAMERECTWIDTH), randint(0, constants.WINDOWHEIGHT))
-
     def updateLabel(self):
-        label = pygame.font.SysFont("monospace", 13).render(str(self.calories), 1, (0,0,0))
+        label = pygame.font.SysFont("monospace", 13).render(str(self.calories), 1, (0, 0, 0))
         self.screen.blit(label, (self.rect.left, self.rect.top - 20))
         pygame.display.update(pygame.display.update())
 

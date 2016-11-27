@@ -33,6 +33,7 @@ class Control(object):
 
         "self.drawGrid();"
         pygame.display.update()
+        #self.simulation.start()
 
     def update(self, dt):
         self.drawingGroup.update(dt)
@@ -45,9 +46,9 @@ class Control(object):
 
     def drawGrid(self):
         self.screen.fill(WHITE)
-        for x in range(0, WINDOWWIDTH, CELLSIZE): # draw vertical lines
+        for x in range(0, WINDOWWIDTH, CELLSIZE):
             pygame.draw.line(self.screen, DARKGRAY, (x, 0), (x, WINDOWHEIGHT))
-        for y in range(0, WINDOWHEIGHT, CELLSIZE): # draw horizontal lines
+        for y in range(0, WINDOWHEIGHT, CELLSIZE):
             pygame.draw.line(self.screen, DARKGRAY, (0, y), (WINDOWWIDTH, y))
 
     def mainLoop(self):
