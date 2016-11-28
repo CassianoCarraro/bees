@@ -34,8 +34,8 @@ class Control(object):
         updateList = self.drawingGroup.draw(self.screen)
 
         pguUpdateList = self.app.update()
-            if (pguUpdateList):
-                updateList += pguUpdateList
+        if (pguUpdateList):
+            updateList += pguUpdateList
 
     def mainLoop(self):
         while self.run:
