@@ -16,19 +16,16 @@ class Simulation:
         self.secTime = 0
         self.frameCount = 0
         self.run = False
+        self.actionMenu = self.control.app.actionMenu
 
     def start(self):
-        actionMenu = self.control.actionMenu
-
-        frogs = int(actionMenu.txtFrogs.value)
-        #frogs = 5
+        frogs = int(self.actionMenu.txtFrogs.value)
         for i in range(0, frogs):
             frog = Frog(self.control.screen, self.control.threadsStopEvent, self.animalsList[self.INDEX_FLIES])
             self.animalsList[self.INDEX_FROGS].append(frog)
             self.startAnimal(frog)
 
-        flies = int(actionMenu.txtFlies.value)
-        #flies = 5
+        flies = int(self.actionMenu.txtFlies.value)
         for i in range(0, flies):
             fly = Bee(self.control.screen, self.control.threadsStopEvent, self.sugarsList)
             self.animalsList[self.INDEX_FLIES].append(fly)
@@ -55,8 +52,8 @@ class Simulation:
 
             minutes = self.secTime // 60
             seconds = self.secTime % 60
-            self.control.actionMenu.txtClock.value = "{0:02}:{1:02}".format(minutes, seconds)
-            self.control.actionMenu.txtClock.repaint()
+            self.actionMenu.txtClock.value = "{0:02}:{1:02}".format(minutes, seconds)
+            self.actionMenu.txtClock.repaint()
 
             for i, animal in enumerate(self.animalsList[self.INDEX_FLIES]):
                 if (not animal.alive):

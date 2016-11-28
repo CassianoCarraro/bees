@@ -5,7 +5,10 @@ import constants
 from pygame.locals import *
 from pgu import gui
 
-class ActionMenu:
+class ActionMenu(object):
+    txtFlies = None
+    txtFrogs = None
+    txtClock = None
 
     def __init__(self, control):
         self.control = control
