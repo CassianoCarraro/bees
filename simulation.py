@@ -52,7 +52,7 @@ class Simulation:
 
             minutes = self.secTime // 60
             seconds = self.secTime % 60
-            self.actionMenu.txtClock.value = "{0:02}:{1:02}".format(minutes, seconds)
+            self.actionMenu.txtClock.value = "Tempo: {0:02}:{1:02}".format(minutes, seconds)
             self.actionMenu.txtClock.repaint()
 
             for i, animal in enumerate(self.animalsList[self.INDEX_FLIES]):

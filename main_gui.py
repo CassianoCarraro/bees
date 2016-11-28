@@ -40,7 +40,7 @@ class MainGui(gui.Desktop):
         tbl = gui.Table(height=screen.get_height(), background=constants.LIGHTGRAY)
         tbl.tr()
         tbl.td(self.simulationArea)
-        tbl.td(self.menuArea)
+        tbl.td(self.menuArea, valign=-1)
 
         self.actionMenu = ActionMenu(control)
         self.menuArea.add(self.actionMenu.init(), 0, 0)

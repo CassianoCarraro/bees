@@ -13,6 +13,8 @@ class Control(object):
     """docstring for Control"""
     def __init__(self):
         self.screen = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+        pygame.display.set_caption(APPTITLE)
+
         self.app = MainGui(self);
         self.app.connect(gui.QUIT, self.terminate, None)
 
