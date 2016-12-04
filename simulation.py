@@ -26,6 +26,9 @@ class Simulation:
         except ValueError:
             return False;
 
+        self.actionMenu.sumFlies.set_text(str(flies))
+        self.actionMenu.sumFrogs.set_text(str(frogs))
+
         for i in range(0, flies):
             fly = Bee(self, self.sugarsList)
             fly.calories = calories
@@ -39,9 +42,6 @@ class Simulation:
 
             self.animalsList[self.INDEX_FROGS].append(frog)
             self.startAnimal(frog)
-
-        self.actionMenu.sumFlies.set_text(str(flies))
-        self.actionMenu.sumFrogs.set_text(str(frogs))
 
         sugar = Sugar()
         self.addObject(sugar)
@@ -80,7 +80,9 @@ class Simulation:
             self.frameCount += 1
 
     def updateSumFlies(self, num):
-        self.actionMenu.sumFlies.set_text(str(int(self.actionMenu.sumFlies.value) + num))
+        self.actionMenu.sumFlies.value = str(int(self.actionMenu.sumFlies.value) + num)
+        self.actionMenu.sumFlies.repaint()
 
     def updateSumFrogs(self, num):
-        self.actionMenu.sumFrogs.set_text(str(int(self.actionMenu.sumFrogs.value) + num))
+        self.actionMenu.sumFlies.value = str(int(self.actionMenu.sumFrogs.value) + num)
+        self.actionMenu.sumFlies.repaint()
