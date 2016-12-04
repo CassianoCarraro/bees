@@ -3,8 +3,8 @@ from random import randint
 
 class Frog(Animal):
 
-    def __init__(self, screen, threadStopEvent, fliesList):
-        Animal.__init__(self, screen, threadStopEvent, 'frog.png')
+    def __init__(self, simulation, fliesList):
+        Animal.__init__(self, simulation, 'frog.png')
         self.speed = randint(50, 80)
         self.moveFreq = randint(15, 20)
         self.fliesList = fliesList
@@ -17,3 +17,5 @@ class Frog(Animal):
             self.calories = self.calories + 1
             fly.die()
 
+    def die(self):
+        self.simulation.updateSumFrogs(-1)

@@ -3,8 +3,8 @@ from random import randint
 
 class Bee(Animal):
 
-    def __init__(self, screen, threadStopEvent, sugarsList):
-        Animal.__init__(self, screen, threadStopEvent, 'bee1.png', 'bee2.png', 'bee3.png')
+    def __init__(self, simulation, sugarsList):
+        Animal.__init__(self, simulation, 'bee1.png', 'bee2.png', 'bee3.png')
         self.speed = randint(100, 200)
         self.moveFreq = 2
         self.sugarsList = sugarsList
@@ -15,3 +15,7 @@ class Bee(Animal):
         sugar = self.sugarsList[self.rect.collidelist(self.sugarsList)]
         #if(not sugar.eaten):
             #sugar.eaten = True
+
+    def die(self):
+        Animal.die(self)
+        self.simulation.updateSumFlies(-1)

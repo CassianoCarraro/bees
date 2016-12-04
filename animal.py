@@ -11,7 +11,7 @@ from utils import *
 
 class Animal(Sprite, Thread):
 
-    def __init__(self, screen, threadStopEvent, *images):
+    def __init__(self, simulation, *images):
         Thread.__init__(self)
         Sprite.__init__(self)
 
@@ -25,14 +25,15 @@ class Animal(Sprite, Thread):
         self.exact_position = list(self.rect.center)
 
         self.animationStatus = 0
-        self.screen = screen
+        self.screen = simulation.control.screen
+        self.simulation = simulation
         self.vec = None
         self.target = None
         self.distance = 0
         self.speed = 100
         self.moveFreq = 1
 
-        self.threadStopEvent = threadStopEvent
+        self.threadStopEvent = simulation.control.threadsStopEvent
         self.calories = 0
 
     def update(self, dt):

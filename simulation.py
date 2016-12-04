@@ -19,17 +19,29 @@ class Simulation:
         self.actionMenu = self.control.app.actionMenu
 
     def start(self):
-        frogs = int(self.actionMenu.txtFrogs.value)
+        try:
+            flies = int(self.actionMenu.txtFlies.value)
+            frogs = int(self.actionMenu.txtFrogs.value)
+            calories = int(self.actionMenu.txtCalories.value)
+        except ValueError:
+            return False;
+
+        for i in range(0, flies):
+            fly = Bee(self, self.sugarsList)
+            fly.calories = calories
+
+            self.animalsList[self.INDEX_FLIES].append(fly)
+            self.startAnimal(fly)
+
         for i in range(0, frogs):
-            frog = Frog(self.control.screen, self.control.threadsStopEvent, self.animalsList[self.INDEX_FLIES])
+            frog = Frog(self, self.animalsList[self.INDEX_FLIES])
+            frog.calories = calories
+
             self.animalsList[self.INDEX_FROGS].append(frog)
             self.startAnimal(frog)
 
-        flies = int(self.actionMenu.txtFlies.value)
-        for i in range(0, flies):
-            fly = Bee(self.control.screen, self.control.threadsStopEvent, self.sugarsList)
-            self.animalsList[self.INDEX_FLIES].append(fly)
-            self.startAnimal(fly)
+        self.actionMenu.sumFlies.set_text(str(flies))
+        self.actionMenu.sumFrogs.set_text(str(frogs))
 
         sugar = Sugar()
         self.addObject(sugar)
@@ -38,6 +50,8 @@ class Simulation:
         self.secTime = 0
         self.frameCount = 0
         self.run = True
+
+        return True
 
     def startAnimal(self, animal):
         self.addObject(animal)
@@ -65,3 +79,8 @@ class Simulation:
 
             self.frameCount += 1
 
+    def updateSumFlies(self, num):
+        self.actionMenu.sumFlies.set_text(str(int(self.actionMenu.sumFlies.value) + num))
+
+    def updateSumFrogs(self, num):
+        self.actionMenu.sumFrogs.set_text(str(int(self.actionMenu.sumFrogs.value) + num))
