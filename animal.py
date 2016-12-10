@@ -32,6 +32,7 @@ class Animal(Sprite, Thread):
         self.distance = 0
         self.speed = 100
         self.moveFreq = 1
+        self.time = 0
 
         self.threadStopEvent = simulation.control.threadsStopEvent
         self.calories = 0
@@ -52,6 +53,14 @@ class Animal(Sprite, Thread):
                 self.exact_position[0] += self.vec[0] * dt
                 self.exact_position[1] += self.vec[1] * dt
                 self.rect.center = self.exact_position
+
+        secTime = self.simulation.control.secTime
+        previousSecTime = self.simulation.control.previousSecTime
+        if previousSecTime < secTime and secTime % 5 == 0:
+            self.calories -= 1
+        if self.calories < 1:
+            self.die()
+
         self.updateLabel()
 
     def move(self):

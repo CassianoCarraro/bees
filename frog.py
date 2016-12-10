@@ -11,11 +11,14 @@ class Frog(Animal):
 
     def update(self, dt):
         Animal.update(self, dt)
+        self.updateCollision();
 
-        fly = self.fliesList[self.rect.collidelist(self.fliesList)]
-        if fly.alive:
+    def updateCollision(self):
+        fly = self.verifyCollision(self.fliesList)
+        if fly is not None and fly.alive:
             self.calories = self.calories + 1
             fly.die()
 
     def die(self):
+        Animal.die(self)
         self.simulation.updateSumFrogs(-1)

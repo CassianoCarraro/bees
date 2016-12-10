@@ -10,3 +10,10 @@ class Sprite(pygame.sprite.Sprite):
 
 	def genPoint(self):
 		return Point(randint(0, constants.GAMERECTWIDTH), randint(0, constants.WINDOWHEIGHT))
+
+	def verifyCollision(self, subjects):
+		subject = None
+		collideIndex = self.rect.collidelist(subjects)
+		if collideIndex != -1:
+			subject = subjects[collideIndex]
+		return subject

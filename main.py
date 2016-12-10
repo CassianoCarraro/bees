@@ -12,9 +12,9 @@ from simulation import Simulation
 class Control(object):
     """docstring for Control"""
     def __init__(self):
-        self.screen = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
-        pygame.display.set_caption(APPTITLE)
-
+        self.display = pygame.display
+        self.screen = self.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
+        self.display.set_caption(APPTITLE)
         self.app = MainGui(self);
         self.app.connect(gui.QUIT, self.terminate, None)
 
@@ -24,15 +24,24 @@ class Control(object):
         self.run = True
         self.threadsStopEvent = threading.Event()
         self.simulation = Simulation(self)
+        self.secTime = 0
+        self.previousSecTime = 0
+        self.frameCount = 0
 
-    def update(self, dt):
-        self.drawingGroup.update(dt)
+    def update(self, dt, display=False):
+        self.secTime = self.frameCount // self.fps
+        obj = self.drawingGroup.update(dt)
+        if display:
+            obj = self.display.update()
+
+        if self.previousSecTime < self.secTime:
+            self.previousSecTime = self.secTime
+        self.frameCount += 1
 
     def draw(self):
         rectSimulation = self.app.getRenderArea()
         self.screen.set_clip(rectSimulation)
         self.screen.fill(WHITE, rectSimulation)
-
         updateList = self.drawingGroup.draw(self.screen)
 
         pguUpdateList = self.app.update()
