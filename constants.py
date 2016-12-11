@@ -9,6 +9,9 @@ assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell siz
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
 CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
+FLYCALMULTIPLY = 10
+SUGARFREQ = 5
+SUGARCALORIES = 5
 
 #             R    G    B
 WHITE     = (255, 255, 255)

@@ -13,6 +13,7 @@ class ActionMenu(object):
     txtClock = None
     sumFrogs = None
     sumFlies = None
+    sumSugar = None
 
     def __init__(self, control):
         self.control = control
@@ -56,7 +57,7 @@ class ActionMenu(object):
         lblSumFlies.style.margin_top = 20
         insideContainer.td(lblSumFlies, align=-1)
         insideContainer.tr()
-        self.sumFlies = gui.Label("0", background=constants.LIGHTGRAY)
+        self.sumFlies = gui.Label("0     ", background=constants.LIGHTGRAY)
         insideContainer.td(self.sumFlies, align=-1)
 
         insideContainer.tr()
@@ -64,8 +65,16 @@ class ActionMenu(object):
         lblSumFrogs.style.margin_top = 5
         insideContainer.td(lblSumFrogs, align=-1)
         insideContainer.tr()
-        self.sumFrogs = gui.Label("0", background=constants.LIGHTGRAY)
+        self.sumFrogs = gui.Label("0     ", background=constants.LIGHTGRAY)
         insideContainer.td(self.sumFrogs, align=-1)
+
+        insideContainer.tr()
+        lblSumSugar = gui.Label("Total Açúcar", background=constants.LIGHTGRAY)
+        lblSumSugar.style.margin_top = 5
+        insideContainer.td(lblSumSugar, align=-1)
+        insideContainer.tr()
+        self.sumSugar = gui.Label("0     ", background=constants.LIGHTGRAY)
+        insideContainer.td(self.sumSugar, align=-1)
 
         container.tr()
         container.td(insideContainer, align=0)
@@ -73,5 +82,5 @@ class ActionMenu(object):
         return container
 
     def start(self):
-        self.control.simulation.start()
-        self.btnStart.disabled = True
+        if (self.control.simulation.start()):
+            self.btnStart.disabled = True

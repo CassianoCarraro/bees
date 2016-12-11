@@ -1,5 +1,4 @@
 import pygame
-import constants
 import time
 import math
 
@@ -36,6 +35,7 @@ class Animal(Sprite, Thread):
 
         self.threadStopEvent = simulation.control.threadsStopEvent
         self.calories = 0
+        self.updateSum(1);
 
     def update(self, dt):
         if (not self.alive):
@@ -75,11 +75,15 @@ class Animal(Sprite, Thread):
 
     def die(self):
         self.alive = False
+        self.updateSum(-1)
 
     def updateLabel(self):
         label = pygame.font.SysFont("monospace", 13).render(str(self.calories), 1, (0, 0, 0))
         self.screen.blit(label, (self.rect.left, self.rect.top - 20))
         pygame.display.update(pygame.display.update())
+
+    def updateSum(self, val):
+        self.simulation.updateSum(val, self.__class__.__name__);
 
     def run(self):
         while (not self.threadStopEvent.is_set() and self.alive):

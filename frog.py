@@ -18,7 +18,3 @@ class Frog(Animal):
         if fly is not None and fly.alive:
             self.calories = self.calories + 1
             fly.die()
-
-    def die(self):
-        Animal.die(self)
-        self.simulation.updateSumFrogs(-1)

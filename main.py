@@ -10,7 +10,7 @@ from pgu import gui
 from simulation import Simulation
 
 class Control(object):
-    """docstring for Control"""
+
     def __init__(self):
         self.display = pygame.display
         self.screen = self.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -28,11 +28,10 @@ class Control(object):
         self.previousSecTime = 0
         self.frameCount = 0
 
-    def update(self, dt, display=False):
+    def update(self, dt):
         self.secTime = self.frameCount // self.fps
-        obj = self.drawingGroup.update(dt)
-        if display:
-            obj = self.display.update()
+        self.drawingGroup.update(dt)
+        self.display.flip()
 
         if self.previousSecTime < self.secTime:
             self.previousSecTime = self.secTime
@@ -42,19 +41,20 @@ class Control(object):
         rectSimulation = self.app.getRenderArea()
         self.screen.set_clip(rectSimulation)
         self.screen.fill(WHITE, rectSimulation)
-        updateList = self.drawingGroup.draw(self.screen)
 
+        updateList = self.drawingGroup.draw(self.screen)
         pguUpdateList = self.app.update()
         if (pguUpdateList):
             updateList += pguUpdateList
 
     def mainLoop(self):
         while self.run:
-            dt = self.clock.tick(self.fps) / 1000.0
-            self.app.loop()
-            self.update(dt)
-            self.draw()
             self.simulation.loop()
+            self.app.loop()
+            self.draw()
+
+            dt = self.clock.tick(self.fps) / 1000.0
+            self.update(dt)
 
     def terminate(self, ev):
         self.threadsStopEvent.set()

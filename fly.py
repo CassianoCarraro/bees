@@ -1,7 +1,9 @@
+import constants
+
 from animal import Animal
 from random import randint
 
-class Bee(Animal):
+class Fly(Animal):
 
     def __init__(self, simulation, sugarsList):
         Animal.__init__(self, simulation, 'bee1.png', 'bee2.png', 'bee3.png')
@@ -16,17 +18,13 @@ class Bee(Animal):
     def updateCollision(self):
         sugar = self.verifyCollision(self.sugarsList)
         if(sugar is not None and not sugar.eaten):
-            sugar.eaten = True
-            self.calories = self.calories + 1
-            if self.calories >= 10:
-                self.multipy()
+            sugar.eat()
+            self.calories = self.calories + constants.SUGARCALORIES
+            if self.calories >= constants.FLYCALMULTIPLY:
+                self.multiply()
 
-    def multipy(self):
-        fly = Bee(self.simulation, self.sugarsList)
-        self.calories = fly.calories = calories / 2
+    def multiply(self):
+        fly = Fly(self.simulation, self.sugarsList)
+        self.calories = fly.calories = self.calories // 2
         self.simulation.addSubject(fly, self.simulation.animalsList[self.simulation.INDEX_FLIES])
         fly.start()
-
-    def die(self):
-        Animal.die(self)
-        self.simulation.updateSumFlies(-1)
